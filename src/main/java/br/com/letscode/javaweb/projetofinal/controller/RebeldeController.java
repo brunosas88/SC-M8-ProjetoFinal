@@ -12,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +28,7 @@ public class RebeldeController {
         return ResponseEntity.created(uri).body(new ResponseRebelde(rebelde));
     }
 
-    @GetMapping
+    @GetMapping// GET UTILIZADO PARA FINS DE TESTAR O BD
     public List<ResponseRebelde> mostrarListaRebeldes() {// o metodo com GET será o responsavel por enviar ao formuario o objeto a ser criado através do parametro model
         return ResponseRebelde.toResponse(rebeldeService.buscaTodosRebeldes());
     }
