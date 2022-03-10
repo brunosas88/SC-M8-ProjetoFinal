@@ -1,8 +1,9 @@
 package br.com.letscode.javaweb.projetofinal.model;
 
-import br.com.letscode.javaweb.projetofinal.dto.RequestRebelde;
+import br.com.letscode.javaweb.projetofinal.dto.RequestOferta;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BDRebeldes {
     private static List<Rebelde> rebeldeList = new ArrayList<>();
@@ -44,4 +45,45 @@ public class BDRebeldes {
                     }
                 });
     }
+
+    public void negocia(RequestOferta oferta, RequestOferta oferta2) {
+
+        AtomicBoolean aptoANegociar = new AtomicBoolean(false);
+        BDRebeldes.rebeldeList.stream().filter(rebelde -> Objects.equals(rebelde.getId(), oferta.getIdRebelde()))
+                .forEach(rebelde -> {
+                    if (!rebelde.getTraidor()) {
+                        for ( Item itemOferta : oferta.getItemList() ) {
+                            for ( Item itemRebelde : rebelde.getInventario() ) {
+                                if (itemOferta.getTipoItem() == itemRebelde.getTipoItem()) {
+                                    if (itemOferta.getQuantidade() <= itemRebelde.getQuantidade()){
+                                        aptoANegociar.set(true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+    }
+
+    public Boolean confereQuantidadeItens(RequestOferta oferta) {
+        AtomicBoolean aptoANegociar = new AtomicBoolean(false);
+        BDRebeldes.rebeldeList.stream().filter(rebelde -> Objects.equals(rebelde.getId(), oferta.getIdRebelde()))
+                .forEach(rebelde -> {
+                    if (!rebelde.getTraidor()) {
+                        for ( Item itemOferta : oferta.getItemList() ) {
+                            for ( Item itemRebelde : rebelde.getInventario() ) {
+                                if (itemOferta.getTipoItem() == itemRebelde.getTipoItem()) {
+                                    if (itemOferta.getQuantidade() <= itemRebelde.getQuantidade()){
+                                        aptoANegociar.set(true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+        return aptoANegociar.get();
+    }
+
+
+
 }

@@ -35,7 +35,7 @@ public class RebeldeServiceTeste {
         Rebelde rebelde = rebeldeService.cadastraRebelde( new RequestRebelde(
            "cliente", 35, 'M',
                 new Localizacao(100.00,200.00, "Andromeda"),
-                new Inventario(1,2,3,4)
+                new Inventario()
         ));
         assertEquals("cliente", rebeldeArgumentCaptor.getValue().getNome());
         verify(bdRebeldes, times(1)).adiciona(ArgumentMatchers.any(Rebelde.class));

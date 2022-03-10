@@ -4,6 +4,7 @@ import br.com.letscode.javaweb.projetofinal.dto.RequestRebelde;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -16,7 +17,7 @@ public class Rebelde {
     private Boolean traidor;
     private Integer contadorReportes;
     private Localizacao localizacao;
-    private Inventario inventario;
+    private List<Item> inventario;
 
     public Rebelde(RequestRebelde requestRebelde) {
         this.id = UUID.randomUUID();
