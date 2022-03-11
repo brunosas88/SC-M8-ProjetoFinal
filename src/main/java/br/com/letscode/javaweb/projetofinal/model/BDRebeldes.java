@@ -3,7 +3,6 @@ package br.com.letscode.javaweb.projetofinal.model;
 import br.com.letscode.javaweb.projetofinal.dto.RequestOferta;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class BDRebeldes {
     private static List<Rebelde> rebeldeList = new ArrayList<>();
@@ -27,10 +26,7 @@ public class BDRebeldes {
 
     public Rebelde atualizaLocalizacao(UUID id, Localizacao localizacao) throws Exception {
         BDRebeldes.rebeldeList.stream().filter(rebelde -> Objects.equals(rebelde.getId(), id))
-                .forEach(rebelde -> {
-                            rebelde.setLocalizacao(localizacao);
-                        }
-                );
+                .forEach(rebelde -> rebelde.setLocalizacao(localizacao));
         return detalhesRebelde(id);
     }
 
@@ -46,44 +42,87 @@ public class BDRebeldes {
                 });
     }
 
-    public void negocia(RequestOferta oferta, RequestOferta oferta2) {
+    public void negocia(RequestOferta ofertas) throws Exception {
 
-        AtomicBoolean aptoANegociar = new AtomicBoolean(false);
+        if (!isTraidor(ofertas.getOferta1().getIdRebelde()) &&
+            !isTraidor(ofertas.getOferta2().getIdRebelde()) &&
+            confereQuantidadeItens(ofertas.getOferta1()) &&
+            confereQuantidadeItens(ofertas.getOferta2()) &&
+            verificaPontosOfertas(ofertas)) {
+            BDRebeldes.rebeldeList.stream().filter(rebelde -> Objects.equals(rebelde.getId(), ofertas.getOferta1().getIdRebelde()))
+                    .forEach(rebelde -> {
+                        retiraItensInventarioRebelde(rebelde, ofertas.getOferta1().getItens());
+                        colocaItensInventarioRebelde(rebelde, ofertas.getOferta2().getItens());
+                    }
+            );
+            BDRebeldes.rebeldeList.stream().filter(rebelde -> Objects.equals(rebelde.getId(), ofertas.getOferta2().getIdRebelde()))
+                    .forEach(rebelde -> {
+                                retiraItensInventarioRebelde(rebelde, ofertas.getOferta2().getItens());
+                                colocaItensInventarioRebelde(rebelde, ofertas.getOferta1().getItens());
+                    }
+            );
+        }
+
+        else {
+            throw new Exception("Negocio não realizado");
+        }
+    }
+
+    public Boolean confereQuantidadeItens(Oferta oferta) {
+        List<Boolean> resultAllItens = new ArrayList<>();
         BDRebeldes.rebeldeList.stream().filter(rebelde -> Objects.equals(rebelde.getId(), oferta.getIdRebelde()))
                 .forEach(rebelde -> {
-                    if (!rebelde.getTraidor()) {
-                        for ( Item itemOferta : oferta.getItemList() ) {
-                            for ( Item itemRebelde : rebelde.getInventario() ) {
-                                if (itemOferta.getTipoItem() == itemRebelde.getTipoItem()) {
-                                    if (itemOferta.getQuantidade() <= itemRebelde.getQuantidade()){
-                                        aptoANegociar.set(true);
-                                    }
+                    for ( Item itemOferta : oferta.getItens()) {
+                        for ( Item itemRebelde : rebelde.getInventario() ) {
+                            if (itemOferta.getTipoItem() == itemRebelde.getTipoItem()) {
+                                if (itemOferta.getQuantidade() <= itemRebelde.getQuantidade()){
+                                    resultAllItens.add(true);
+                                }
+                                else {
+                                    resultAllItens.add(false);
                                 }
                             }
                         }
                     }
                 });
+
+        return !resultAllItens.contains(false);
     }
 
-    public Boolean confereQuantidadeItens(RequestOferta oferta) {
-        AtomicBoolean aptoANegociar = new AtomicBoolean(false);
-        BDRebeldes.rebeldeList.stream().filter(rebelde -> Objects.equals(rebelde.getId(), oferta.getIdRebelde()))
-                .forEach(rebelde -> {
-                    if (!rebelde.getTraidor()) {
-                        for ( Item itemOferta : oferta.getItemList() ) {
-                            for ( Item itemRebelde : rebelde.getInventario() ) {
-                                if (itemOferta.getTipoItem() == itemRebelde.getTipoItem()) {
-                                    if (itemOferta.getQuantidade() <= itemRebelde.getQuantidade()){
-                                        aptoANegociar.set(true);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-        return aptoANegociar.get();
+    public Boolean isTraidor(UUID id) throws Exception {
+        Rebelde rebelde = detalhesRebelde(id);
+        return rebelde.getTraidor();
     }
 
+    public Boolean verificaPontosOfertas(RequestOferta ofertas) {
+        int pontos1 = 0, pontos2 = 0;
+        for (Item item1: ofertas.getOferta1().getItens()) {
+            pontos1 += (item1.getPontos() * item1.getQuantidade());
+        }
+        for (Item item2: ofertas.getOferta2().getItens()) {
+            pontos2 += (item2.getPontos() * item2.getQuantidade());
+        }
+        return pontos1 == pontos2;
+    }
 
+    public void retiraItensInventarioRebelde(Rebelde rebelde, List<Item> itemList) {
+        for ( Item itemARetirar : itemList) {
+            for ( Item itemRebelde : rebelde.getInventario() ) {
+                if (itemARetirar.getTipoItem() == itemRebelde.getTipoItem()) {
+                    itemRebelde.setQuantidade(itemRebelde.getQuantidade() - itemARetirar.getQuantidade());
+                }
+            }
+        }
+    }
+
+    public void colocaItensInventarioRebelde(Rebelde rebelde, List<Item> itemList) {
+        for ( Item itemARetirar : itemList) {
+            for ( Item itemRebelde : rebelde.getInventario() ) {
+                if (itemARetirar.getTipoItem() == itemRebelde.getTipoItem()) {
+                    itemRebelde.setQuantidade(itemRebelde.getQuantidade() + itemARetirar.getQuantidade());
+                }
+            }
+        }
+    }
 
 }

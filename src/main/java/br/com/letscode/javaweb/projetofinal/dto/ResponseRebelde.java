@@ -1,6 +1,6 @@
 package br.com.letscode.javaweb.projetofinal.dto;
 
-import br.com.letscode.javaweb.projetofinal.model.Inventario;
+import br.com.letscode.javaweb.projetofinal.model.Item;
 import br.com.letscode.javaweb.projetofinal.model.Localizacao;
 import br.com.letscode.javaweb.projetofinal.model.Rebelde;
 import lombok.Getter;
@@ -18,7 +18,7 @@ public class ResponseRebelde {
     private Integer idade;
     private Character genero;
     private Localizacao localizacao;
-    private Inventario inventario;
+    private List<Item> inventario;
 
     private Boolean traidor;
     private Integer contadorReportes;
@@ -29,7 +29,7 @@ public class ResponseRebelde {
         idade = rebelde.getIdade();
         genero = rebelde.getGenero();
         localizacao = rebelde.getLocalizacao();
-        inventario = rebelde.getInventario();
+        inventario =  rebelde.getInventario();
 
         traidor = rebelde.getTraidor();
         contadorReportes = rebelde.getContadorReportes();

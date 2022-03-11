@@ -1,14 +1,13 @@
 package br.com.letscode.javaweb.projetofinal.service;
 
 import br.com.letscode.javaweb.projetofinal.dto.RequestRebelde;
-import br.com.letscode.javaweb.projetofinal.model.BDRebeldes;
-import br.com.letscode.javaweb.projetofinal.model.Inventario;
-import br.com.letscode.javaweb.projetofinal.model.Localizacao;
-import br.com.letscode.javaweb.projetofinal.model.Rebelde;
+import br.com.letscode.javaweb.projetofinal.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,11 +34,10 @@ public class RebeldeServiceTeste {
         Rebelde rebelde = rebeldeService.cadastraRebelde( new RequestRebelde(
            "cliente", 35, 'M',
                 new Localizacao(100.00,200.00, "Andromeda"),
-                new Inventario()
+                List.of(new Item(TipoItem.ARMA, 5), new Item(TipoItem.MUNICAO, 20))
         ));
-        assertEquals("cliente", rebeldeArgumentCaptor.getValue().getNome());
+        assertEquals("cliente", rebelde.getNome());
         verify(bdRebeldes, times(1)).adiciona(ArgumentMatchers.any(Rebelde.class));
-
     }
 
 }

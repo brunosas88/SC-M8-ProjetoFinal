@@ -16,7 +16,7 @@ public class Item {
     }
 
     public Integer especificaPontos (TipoItem tipoItem) {
-        Integer pontos = 0;
+        int pontos = 0;
         switch (tipoItem) {
             case ARMA:
                 pontos = 4;

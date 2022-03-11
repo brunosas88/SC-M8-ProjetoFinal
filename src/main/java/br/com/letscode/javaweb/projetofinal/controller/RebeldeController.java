@@ -1,5 +1,6 @@
 package br.com.letscode.javaweb.projetofinal.controller;
 
+import br.com.letscode.javaweb.projetofinal.dto.RequestOferta;
 import br.com.letscode.javaweb.projetofinal.dto.RequestRebelde;
 import br.com.letscode.javaweb.projetofinal.dto.ResponseRebelde;
 import br.com.letscode.javaweb.projetofinal.model.Localizacao;
@@ -41,6 +42,12 @@ public class RebeldeController {
     @PostMapping("/reporta")
     public ResponseEntity reporta (@RequestHeader("rebeldeId") UUID id){
         rebeldeService.reportaTraidor(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/negocia")
+    public ResponseEntity negocia (@RequestBody RequestOferta requestOferta) throws Exception {
+        rebeldeService.negocia(requestOferta);
         return ResponseEntity.ok().build();
     }
 }

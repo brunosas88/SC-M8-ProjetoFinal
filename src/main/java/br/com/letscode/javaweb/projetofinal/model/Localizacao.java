@@ -10,10 +10,4 @@ public class Localizacao {
     private Double latitude;
     private Double longitude;
     private String nomeGalaxia;
-
-    public Localizacao (Localizacao localizacao) {
-        latitude = localizacao.getLatitude();
-        longitude = localizacao.getLongitude();
-        nomeGalaxia = localizacao.getNomeGalaxia();
-    }
 }

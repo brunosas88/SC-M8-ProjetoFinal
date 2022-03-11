@@ -1,13 +1,11 @@
 package br.com.letscode.javaweb.projetofinal.dto;
 
-import br.com.letscode.javaweb.projetofinal.model.Inventario;
 import br.com.letscode.javaweb.projetofinal.model.Item;
 import br.com.letscode.javaweb.projetofinal.model.Localizacao;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

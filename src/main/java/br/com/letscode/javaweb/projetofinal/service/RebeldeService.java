@@ -1,6 +1,7 @@
 package br.com.letscode.javaweb.projetofinal.service;
 
 import br.com.letscode.javaweb.projetofinal.ProjetoFinalApplication;
+import br.com.letscode.javaweb.projetofinal.dto.RequestOferta;
 import br.com.letscode.javaweb.projetofinal.dto.RequestRebelde;
 import br.com.letscode.javaweb.projetofinal.model.BDRebeldes;
 import br.com.letscode.javaweb.projetofinal.model.Localizacao;
@@ -33,4 +34,10 @@ public class RebeldeService {
     public void reportaTraidor (UUID id) {
         bdRebeldes.reportaTraidor(id);
     }
+
+    public void negocia(RequestOferta oferta) throws Exception {
+        bdRebeldes.negocia(oferta);
+    }
+
+
 }
