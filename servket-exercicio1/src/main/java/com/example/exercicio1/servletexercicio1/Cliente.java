@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.rmi.ServerException;
+import java.util.List;
 
 @WebServlet(name="Cliente", value="/cliente")
 public class Cliente extends HttpServlet {
@@ -34,6 +34,18 @@ public class Cliente extends HttpServlet {
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("clienteCadastrado.jsp");
         request.setAttribute("cliente", cliente.getNome());
         requestDispatcher.forward(request, response);
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        List<ClienteModel> clientes = listaClientes.buscarClientes();
+
+        request.setAttribute("clientes", clientes);
+
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("listaClientes.jsp");
+        requestDispatcher.forward(request, response);
+
     }
 
 }
