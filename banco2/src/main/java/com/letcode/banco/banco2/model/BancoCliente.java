@@ -2,6 +2,7 @@ package com.letcode.banco.banco2.model;
 
 import com.letcode.banco.banco2.dto.RequestCliente;
 import com.letcode.banco.banco2.dto.RequestDeposito;
+import com.letcode.banco.banco2.dto.RequestSacar;
 
 import java.util.*;
 
@@ -60,5 +61,23 @@ public class BancoCliente {
                     }
                 });
     }
+
+    public void sacar(UUID id, RequestSacar requestSacar) {
+        BancoCliente.clientes.stream().filter(cliente -> Objects.equals(cliente.getId(), id))
+                .forEach(cliente -> {
+                    Optional<Conta> resultConta = cliente.getContas().stream().filter( conta -> Objects.equals(conta.getId(), requestSacar.getConta())).findAny();
+                    if(resultConta.isPresent() && requestSacar.getValor() < resultConta.get().getSaldo()) {
+                        Double novoSaldo = resultConta.get().getSaldo() - requestSacar.getValor();
+                        resultConta.get().setSaldo(novoSaldo);
+                    } else {
+                        try {
+                            throw new Exception("Conta não encontrada");
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+    }
+
 
 }

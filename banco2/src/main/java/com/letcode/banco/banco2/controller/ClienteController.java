@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ClienteController {
     @PostMapping
     @ResponseBody
     public ResponseEntity<ResponseCliente> cadastraCliente(
-            @RequestBody RequestCliente requestCliente,
+            @RequestBody @Valid RequestCliente requestCliente,
             UriComponentsBuilder uriComponentsBuilder
     ) {
         Cliente cliente = clienteService.cadastraCliente(requestCliente);
@@ -52,11 +53,8 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseCliente> detalhesCliente(
-            @PathVariable UUID id
-    ) throws Exception{
-        Cliente cliente = bancoCliente.detalhesCliente(id);
-        return ResponseEntity.ok(new ResponseCliente(cliente));
+    public ResponseEntity<ResponseCliente> detalhesCliente(@PathVariable UUID id) throws Exception{
+        return ResponseEntity.ok(new ResponseCliente(clienteService.detalhesCliente(id)));
     }
 
     @PutMapping("/{id}")
@@ -64,8 +62,7 @@ public class ClienteController {
             @PathVariable UUID id,
             @RequestBody RequestCliente requestCliente
     ) throws Exception{
-        Cliente cliente = bancoCliente.atulizaCliente(id, requestCliente);
-        return ResponseEntity.ok(new ResponseCliente(cliente));
+        return ResponseEntity.ok(new ResponseCliente(clienteService.atualizaCliente(id, requestCliente)));
     }
 
     @DeleteMapping("/{id}")

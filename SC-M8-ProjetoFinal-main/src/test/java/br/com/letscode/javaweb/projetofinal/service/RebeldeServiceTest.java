@@ -71,12 +71,9 @@ public class RebeldeServiceTest {
 
         Rebelde rebelde = rebeldeService.cadastraRebelde(requestRebelde);
 
-//        verify(bdRebeldes).adiciona(rebeldeArgumentCaptor.capture());
-
         assertEquals(requestRebelde.getNome(), rebelde.getNome());
         assertNotNull(rebelde.getId());
     }
-
 
 
 }

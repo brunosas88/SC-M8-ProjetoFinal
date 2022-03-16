@@ -26,4 +26,5 @@ public class AcoesController {
         acoesRebelde.reportaTraidor(id);
         return ResponseEntity.ok().build();
     }
+
 }
